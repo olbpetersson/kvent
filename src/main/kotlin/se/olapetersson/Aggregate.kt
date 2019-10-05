@@ -14,7 +14,7 @@ abstract class Aggregate {
     private lateinit var eventChannel: SendChannel<Event>
 
     // Imitates the database at this point
-    val database = ConcurrentLinkedQueue<Event>()
+    var database = ConcurrentLinkedQueue<Event>()
 
     // TODO: Change this GlobalScope
     fun create() = GlobalScope.actor<Command> {
@@ -48,12 +48,14 @@ abstract class Aggregate {
 
     suspend fun replay() {
         state = IntState(0)
-        database.forEach { eventChannel.send(it) }
+        var databaseCopy = database
+        database = ConcurrentLinkedQueue()
+        databaseCopy.forEach { eventChannel.send(it) }
+
     }
 
     open fun onEvent(event: Any) {
         // NO-OP if not chosen
-        println("$event received")
     }
 }
 

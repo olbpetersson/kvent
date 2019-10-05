@@ -1,3 +1,4 @@
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import se.olapetersson.AddOneCommand
 import se.olapetersson.Example
@@ -10,6 +11,6 @@ fun main() = runBlocking {
     for (i in (1..10)) {
         communicationPath.send(AddOneCommand(i))
     }
-
+    delay(5000)
     myExample.replay()
 }
