@@ -20,7 +20,6 @@ abstract class Aggregate<T>(
     var state: T = initialState
         private set
 
-
     private val replayInAction = AtomicBoolean(false)
 
     init {
@@ -68,7 +67,6 @@ abstract class Aggregate<T>(
 
         events?.forEach { eventChannel.send(it) }
         replayInAction.set(false)
-
     }
 
     open fun onEvent(event: Event) {

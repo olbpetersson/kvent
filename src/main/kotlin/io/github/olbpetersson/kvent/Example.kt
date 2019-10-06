@@ -13,9 +13,10 @@ data class AddOneCommand(val value: Int) : Command()
 
 data class IntState(val value: Int)
 
-class Example(id: AggregateId = "example",
-              initialState: IntState,
-              persistence: Persistence = InMemoryPersistence()
+class Example(
+    id: AggregateId = "example",
+    initialState: IntState,
+    persistence: Persistence = InMemoryPersistence()
 ) : Aggregate<IntState>(id, initialState, persistence) {
 
     override fun routeEvent(event: Event): IntState {

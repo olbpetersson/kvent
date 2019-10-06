@@ -4,11 +4,9 @@ buildscript {
     }
 
     ext.kotlin_version = '1.3.50'
-    ext.ktor_version = '1.2.5'
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.3"
     }
 }
 
@@ -17,15 +15,14 @@ plugins {
     id 'com.adarshr.test-logger' version '1.7.0'
     // Lists all available dependency upgrades. Use with ./gradlew dependencyUpdates -Drevision=release
     id 'com.github.ben-manes.versions' version '0.22.0'
+    id 'com.jfrog.bintray' version '1.8.4'
 }
 
-// packages a fat jar
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'kotlin'
-
-jar.enabled = false
-tasks.build.dependsOn tasks.shadowJar
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 compileKotlin { kotlinOptions { jvmTarget = "1.8" } }
 compileTestKotlin { kotlinOptions { jvmTarget = "1.8" } }
@@ -39,33 +36,19 @@ repositories {
 
 apply from: 'gradle/ktlint.gradle'
 
-def appName = 'app'
-// TODO: You may want to change the package name once you've cloned this repo
-def mainClassName = 'se.olapetersson.ApplicationKt'
+def appName = 'kvent'
+def mainClassName = 'io.github.olbpetersson.kvent.ApplicationKt'
 
-shadowJar {
-    baseName = appName
-    classifier = null
-    version = null
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
 }
 
-task run(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = mainClassName
-}
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2"
 
-    // ktor as http-server and http client
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-jackson:$ktor_version"
-    compile "io.ktor:ktor-client-core:$ktor_version"
-    compile "io.ktor:ktor-client-apache:$ktor_version"
 
     // Use logback + json encoder for logging
     compile "ch.qos.logback:logback-classic:1.2.3"
@@ -74,4 +57,63 @@ dependencies {
     // Test dependencies
     testCompile "junit:junit:4.12"
     testCompile "org.assertj:assertj-core:3.13.2"
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "GPL-3.0"
+            url "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "olbpetersson    "
+            name "Ola Petersson"
+            email "olbpetersson@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/olbpetersson/kvent"
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            groupId 'io.github.olbpetersson'
+            artifactId 'kvent'
+            version '0.0.1'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Event Sourcing with Kotlin!')
+                root.appendNode('name', 'Kvent')
+                root.appendNode('url', 'https://github.com/olbpetersson/kvent')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+
+}
+
+bintray {
+    user = System.getProperty('bintray.user')
+    key = System.getProperty('bintray.key')
+    publications = ['mavenPublication']
+
+    pkg {
+        repo = 'kvent'
+        name = 'kvent'
+        licenses = ['GPL-3.0']
+        vcsUrl = 'https://github.com/olbpetersson/kvent.git'
+        version {
+            name = '0.0.1'
+            desc = '0.0.1'
+            released  = new Date()
+        }
+    }
+
 }

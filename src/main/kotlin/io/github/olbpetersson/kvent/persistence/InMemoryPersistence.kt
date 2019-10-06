@@ -22,5 +22,4 @@ class InMemoryPersistence : Persistence {
             tables[id]
         }
     }
-
 }
