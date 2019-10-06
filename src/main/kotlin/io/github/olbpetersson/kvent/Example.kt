@@ -1,11 +1,11 @@
-package se.olapetersson.kvent
+package io.github.olbpetersson.kvent
 
-import se.olapetersson.kvent.model.Aggregate
-import se.olapetersson.kvent.model.AggregateId
-import se.olapetersson.kvent.model.Command
-import se.olapetersson.kvent.model.Event
-import se.olapetersson.kvent.persistence.InMemoryPersistence
-import se.olapetersson.kvent.persistence.Persistence
+import io.github.olbpetersson.kvent.model.Aggregate
+import io.github.olbpetersson.kvent.model.AggregateId
+import io.github.olbpetersson.kvent.model.Command
+import io.github.olbpetersson.kvent.model.Event
+import io.github.olbpetersson.kvent.persistence.InMemoryPersistence
+import io.github.olbpetersson.kvent.persistence.Persistence
 
 data class OneAddedEvent(val value: Int) : Event()
 

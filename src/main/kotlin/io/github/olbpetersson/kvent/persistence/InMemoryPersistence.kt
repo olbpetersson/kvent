@@ -1,9 +1,9 @@
-package se.olapetersson.kvent.persistence
+package io.github.olbpetersson.kvent.persistence
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import se.olapetersson.kvent.model.AggregateId
-import se.olapetersson.kvent.model.Event
+import io.github.olbpetersson.kvent.model.AggregateId
+import io.github.olbpetersson.kvent.model.Event
 import java.util.LinkedList
 
 class InMemoryPersistence : Persistence {

@@ -1,4 +1,4 @@
-package se.olapetersson.kvent
+package io.github.olbpetersson.kvent
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

@@ -1,4 +1,4 @@
-package se.olapetersson.kvent.model
+package io.github.olbpetersson.kvent.model
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -6,7 +6,7 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import se.olapetersson.kvent.persistence.Persistence
+import io.github.olbpetersson.kvent.persistence.Persistence
 import java.util.concurrent.atomic.AtomicBoolean
 
 typealias AggregateId = String

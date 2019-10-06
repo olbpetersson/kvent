@@ -1,7 +1,7 @@
-package se.olapetersson.kvent.persistence
+package io.github.olbpetersson.kvent.persistence
 
-import se.olapetersson.kvent.model.AggregateId
-import se.olapetersson.kvent.model.Event
+import io.github.olbpetersson.kvent.model.AggregateId
+import io.github.olbpetersson.kvent.model.Event
 import java.util.Queue
 
 interface Persistence {
